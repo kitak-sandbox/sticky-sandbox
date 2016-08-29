@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>sticky sandbox</title>
+    <style>
+        body, div {
+            margin: 0px; 
+            padding: 0px;
+        }
+        .banner {
+            position: fixed;
+            top: -100px;
+            left: 0px;
+            height: 100px;
+            background-color: tomato;
+            width: 100%;
+            transform: translate3d(0px,100px,0px);
+        }
+        header {
+            text-align: center;
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            height: 44px;
+            background-color: black;
+            color: white;
+            width: 100%;
+            transform: translate3d(0px,100px,0px);
+        }         
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            var banner = document.querySelector('.banner');
+            var header = document.querySelector('header');
+            
+            var previus;
+            var lastOffset;
+            
+            var move = () => {
+                var yOffset = window.pageYOffset;
+                if (yOffset === lastOffset) {
+                    window.requestAnimationFrame(move);
+                    return;
+                } else {
+                    lastOffset = yOffset;
+                }
+                if (yOffset >= 0 && yOffset <= 100) {
+                    previus = 100 - yOffset;
+                    banner.style.transform = `translate3d(0px,${100 - yOffset}px,0px)`;
+                    header.style.transform = `translate3d(0px,${100 - yOffset}px,0px)`;
+                } else {
+                    if (previus > 0) {
+                        previus = 0;
+                        banner.style.transform = `translate3d(0px,0px,0px)`;
+                        header.style.transform = `translate3d(0px,0px,0px)`;
+                    }
+                }
+                window.requestAnimationFrame(move);
+            };
+            window.requestAnimationFrame(move);
+        });
+    </script>
+</head>
+<body>
+<div style="position: relative">
+    <div class="banner"></div>
+    <header>HEADER</header> 
+</div>
+<div style="height: 10000px;"><p>めっちゃ長いコンテンツ</p></div>
+</body>
+</html>
